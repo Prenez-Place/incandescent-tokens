@@ -9,7 +9,9 @@ import "./ERC721Tradable.sol";
  * Creature - a contract for my non-fungible creatures.
  */
 contract PrenezPlaceERC721 is ERC721Tradable {
-    constructor(address _proxyRegistryAddress)
-    ERC721Tradable("Prenez Place !", "PP!", _proxyRegistryAddress)
-    {}
+    constructor(
+        string memory _name,
+        string memory _symbol,
+        address _proxyRegistryAddress
+    ) ERC721Tradable(_name, _symbol, _proxyRegistryAddress) {}
 }
