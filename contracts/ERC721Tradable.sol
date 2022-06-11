@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -24,7 +24,7 @@ contract ProxyRegistry {
  * @title ERC721Tradable
  * ERC721Tradable - ERC721 contract that whitelists a trading address, and has minting functionality.
  */
-abstract contract ERC721Tradable is ERC721, ContextMixin, NativeMetaTransaction, Ownable {
+abstract contract ERC721Tradable is ERC721Burnable, ContextMixin, NativeMetaTransaction, Ownable {
     using SafeMath for uint256;
     using Counters for Counters.Counter;
 
@@ -99,5 +99,16 @@ abstract contract ERC721Tradable is ERC721, ContextMixin, NativeMetaTransaction,
         returns (address sender)
     {
         return ContextMixin.msgSender();
+    }
+
+    /**
+     * Override the _transfer internal function to burn a token when trying to transfer it.
+     */
+    function _transfer(
+        address,
+        address,
+        uint256 tokenId
+    ) internal override {
+        ERC721Burnable.burn(tokenId);
     }
 }
